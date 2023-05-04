@@ -14,6 +14,13 @@ AUTH_SERVER_PORT = 9000
 ADDITION_SERVER_URL = "127.0.0.1"
 ADDITION_SERVER_PORT = 9001
 
+Candidats = [
+    "Pierre Olivier Mercier",
+    "Sebastien Bombal",
+    "Constance Beguier",
+    "Jean Lassal"
+]
+
 
 parser = argparse.ArgumentParser(
                     prog='CRIPY',
@@ -23,18 +30,31 @@ parser.add_argument('-R', '--result',
                     action='store_true', required=False)
 args = parser.parse_args()
 
+if args.result:
+    print("Checking results")
+    r = requests.get(
+            url=f'http://{AUTH_SERVER_URL}:{AUTH_SERVER_PORT}/results'
+        )
+    
+    if 'Error' in r.text:
+        print(r.text)
+        exit(1)
+
+    result = r.text[1:-1].split()
+    result = [ int(r) for r in result ]
+    winner = Candidats[result.index(max(result))]
+    print(f"Winner is : {winner}\n")
+    for k, v in enumerate(Candidats):
+        print(f"{v} has {result[k]} vote(s).")
+    exit(0)
+
 
 name = input("Enter your name > ")
 h = hashlib.new('sha256')
 h.update(name.encode())
 name = h.hexdigest()
 
-Candidats = [
-    "Pierre Olivier Mercier",
-    "Sebastien Bombal",
-    "Constance Beguier",
-    "Jean Lassal"
-]
+
 
 if not args.result:
     print("Candidates value :")
@@ -84,14 +104,3 @@ r = requests.post(
 if ("Error" in r.text):
     print(r.text)
     exit(1)
-
-
-print("Checking results")
-r = requests.get(
-        url=f'http://{AUTH_SERVER_URL}:{AUTH_SERVER_PORT}/results'
-    )
-
-result = r.text[1:-1].split()
-result = [ int(r) for r in result ]
-winner = Candidats[result.index(max(result))]
-print(f"Winner is : {winner}")

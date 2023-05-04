@@ -1,13 +1,25 @@
-import numpy as np
 from Pyfhel import Pyfhel, PyCtxt
 from flask import *
 import requests
 import secrets
-from pathlib import Path
+import datetime as dt
+import argparse
 
 from database import *
 
 app = Flask(__name__)
+
+
+parser = argparse.ArgumentParser(
+                    prog='CRIPY',
+                    description='Auth server')
+
+parser.add_argument('--endtime', required=True)
+args = parser.parse_args()
+
+END_TIME = dt.datetime.now()
+END_TIME += dt.timedelta(seconds=int(args.endtime))
+
 
 ADDITION_SERVER_URL = "127.0.0.1"
 ADDITION_SERVER_PORT = 9001
@@ -26,6 +38,8 @@ def set_vote(digest):
 
 @app.route("/results", methods=["GET"])
 def result():
+    if (dt.datetime.now() < END_TIME):
+        return "Error the vote is not finished"
     r = requests.get(
         url=f'http://{ADDITION_SERVER_URL}:{ADDITION_SERVER_PORT}/results'
     )
@@ -38,7 +52,8 @@ def result():
 def init_table():
     return {
             "pkey": HE.to_bytes_public_key().decode('cp437'),
-            "context": HE.to_bytes_context().decode('cp437')
+            "context": HE.to_bytes_context().decode('cp437'),
+            "endtime": END_TIME.timestamp()
             }
 
 
