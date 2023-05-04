@@ -1,63 +1,47 @@
-import json
 from pathlib import Path
+import json
 
 DATABASE = "db.json"
 
-"""
-dict = {
-    "Voters": {
-        # Votant : A voté
-        "Pierre": False, 
-        "Lulu": False,
-        "Adrien": False
-    },
 
-    "Candidats": {
-        # Nom : Count
-        "Macron": 0,
-        "Poutine": 0,
-        "Bashar Al Assad": 0,
-    },
-}
-"""
+def save_data(data_obj):
+    if not data_obj:
+        return False
+    with open(DATABASE, "w+") as fp:
+        fp.write(json.dumps(data_obj, indent=4))
+    return True
 
 
-class Database():
-    def __init__(self) -> None:
-        dataobj = self.get_data()
-        self.save_data(dataobj)
+def load_data():
+    global DATABASE
 
-        self.data = dataobj
+    if not Path(DATABASE).exists():
+        with open(DATABASE, "w+") as fpcreate:
+            pass
 
-    def save_data(self, data_obj):
-        if not data_obj:
-            return False
-        with open(DATABASE, "w+") as fp:
-            fp.write(json.dumps(data_obj, indent=4))
-        return True
+    with open(DATABASE, "r+") as fp:
+        r = fp.read()
+    try:
+        dataobj = json.loads(r)
+    except:
+        dataobj = {}
 
-
-    def get_data(self):
-        global DATABASE
-
-        # Create if not exists
-        if not Path(DATABASE).exists():
-            with open(DATABASE, "w+") as openfp:
-                pass
-
-        with open(DATABASE, "r+") as fp:
-            r = fp.read()
-        try:
-            dataobj = json.loads(r)
-        except:
-            dataobj = {}
-
-        dataobj['Voters'] = dataobj.get("Voters", {})
-        dataobj['Candidats'] = dataobj.get("Candidats", {})
-
-        return dataobj
+    return dataobj
 
 
-if (__name__ == "__main__"):
-    d = Database()
-    print(d.get_data())
+def init_data():
+    dataobj = load_data()
+    save_data(dataobj)
+
+    return dataobj
+
+
+def check_token(token: str):
+    obj = load_data()
+    if obj.get(token, True) == False:
+        # Vote valid
+       obj[token] = True
+       save_data(obj)
+       return True
+    return False
+    
