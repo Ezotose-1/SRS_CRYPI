@@ -54,6 +54,11 @@ def load_init_table():
 
 if __name__ == "__main__":
     HE = Pyfhel()
-    ENCRYPT_RESULT = load_init_table()
+    try:
+        ENCRYPT_RESULT = load_init_table()
+    except:
+        print(" * Cannot connect to authenticate server, please run it before.")
+        print(" * usage : python3 src/server_auth.py")
+        exit(1)
 
     app.run(host="127.0.0.1", port=9001)
