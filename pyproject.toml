@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "crypi"
+version = "0.1.0"
+description = ""
+authors = ["Adrien Langou <adrien.langou@epita.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyfhel = "^3.4.1"
+numpy = "^1.24.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
