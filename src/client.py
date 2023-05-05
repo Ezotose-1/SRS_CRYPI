@@ -117,9 +117,13 @@ def auth_client():
     @param None
     @return token: str, context: str, pkey: str
     """
-    r = requests.get(
-        url=f'http://{AUTH_SERVER_URL}:{AUTH_SERVER_PORT}/pk?name={name}'
-    )
+
+    try:
+        r = requests.get(
+            url=f'http://{AUTH_SERVER_URL}:{AUTH_SERVER_PORT}/pk?name={name}'
+        )
+    except requests.exceptions.ConnectionError:
+        log.server_error("Error cannot access to authenticate server")
 
     if "Error" in r.text:
         log.server_error(r.text)
@@ -157,13 +161,17 @@ def send_vote(encrypted_vote, token):
     @param token  :  Client token used to authenticate to the server  
     @return Boolean of success or Error
     """
-    r = requests.post(
-            url=f'http://{ADDITION_SERVER_URL}:{ADDITION_SERVER_PORT}/vote',
-            json={
-                'cyphervalue': encrypted_vote.decode("cp437"),
-                'token': token
-            }
-        )
+    try:
+        r = requests.post(
+                url=f'http://{ADDITION_SERVER_URL}:{ADDITION_SERVER_PORT}/vote',
+                json={
+                    'cyphervalue': encrypted_vote.decode("cp437"),
+                    'token': token
+                }
+            )
+    except requests.exceptions.ConnectionError:
+        log.server_error("Error cannot access to addition server")
+
 
     if ("Error" in r.text):
         log.server_error(r.text)
