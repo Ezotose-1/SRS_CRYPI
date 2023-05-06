@@ -1,9 +1,9 @@
 ##
-# Author(s)
+# Authors
 # - Pierre BLAESS
 # - Adrien LANGOU
 # - Aurélien REBOURG
-# - Lucas THESE
+# - Lucas THEZE
 ##
 
 import numpy as np
@@ -26,13 +26,13 @@ Candidates = [
     "Pierre Olivier Mercier",
     "Sebastien Bombal",
     "Constance Beguier",
-    "Jean Lassal"
+    "Jean Lassalle"
 ]
 
 
 # Parse arguments
 # usage: `python3 client.py -R` to ask for the results
-#        `python3 client.py ` to add a vote 
+#        `python3 client.py ` to add a vote
 parser = argparse.ArgumentParser(
                     prog='CRIPY',
                     description='Votai')
@@ -113,7 +113,7 @@ def user_inputs():
 
 
 def auth_client():
-    """! Ask the __authentication__ server to authenticate the client and send the public key.
+    """! Ask the __authentication__ server to authenticate the client and get the server public key.
     @param None
     @return token: str, context: str, pkey: str
     """
@@ -139,7 +139,7 @@ def auth_client():
 
 def encrypt_vote(HE, candidate_index):
     """! Encrypt the vote vector using server public key and context.
-    @param HE  :  Server homogenous encryption object.
+    @param HE  :  Server homomorphic encryption object.
     @param candidate_index  :  User vote index in the Candidates array.
     @return s_cyphervalue  :  serialized encrypted vote vector 
     """
@@ -166,7 +166,7 @@ def send_vote(encrypted_vote, token):
                 url=f'http://{ADDITION_SERVER_URL}:{ADDITION_SERVER_PORT}/vote',
                 json={
                     'cyphervalue': encrypted_vote.decode("cp437"),
-                    'token': token
+                    'token': token # it is impossible to get the voter's name from a token
                 }
             )
     except requests.exceptions.ConnectionError:
