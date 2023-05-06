@@ -16,19 +16,16 @@ First, you have to launch the server_auth.py and then the server_addition.py. An
 The server_auth program needs the argument **--endtime** to work. This argument is the duration of the vote. In the example below, 60 means that the vote will be open for **60 seconds**. After this time, the voters will not be able to add their vote.
 ```
 python server_auth.py --endtime 60
-
 ```
 
 ```
 python server_addition.py
-
 ```
 
 You can launch the client.py like this to make a vote and follow the instructions given by the program :
 
 ```
 python client.py
-
 ```
 To ask for the final results when the vote has ended, you can call the client.py with the -R or --result argument :
 ```
