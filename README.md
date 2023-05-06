@@ -15,13 +15,11 @@ Once the libraries are installed you are ready to use our project.
 First, you have to launch the server_auth.py and then the server_addition.py. An init request will be made to exchange public key (only) between servers.
 The server_auth program needs the argument **--endtime** to work. This argument is the duration of the vote. In the example below, 60 means that the vote will be open for **60 seconds**. After this time, the voters will not be able to add their vote.
 ```
-
 python server_auth.py --endtime 60
 
 ```
 
 ```
-
 python server_addition.py
 
 ```
@@ -29,7 +27,6 @@ python server_addition.py
 You can launch the client.py like this to make a vote and follow the instructions given by the program :
 
 ```
-
 python client.py
 
 ```
