@@ -1,5 +1,7 @@
 This project is a PoC of an e-voting system using homomorphic encryption.
 
+It has been made by the group 7 composed of Adrien Langou, Aurelien Rebourg, Pierre Blaess and Lucas Theze
+
 # How to use our project ?
 
 Each file of this project is detailed in the sections below.
